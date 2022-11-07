@@ -9,6 +9,7 @@ import com.anjiplus.template.gaea.business.modules.report.controller.dto.ReportD
 import com.anjiplus.template.gaea.business.modules.report.controller.param.ReportParam;
 import com.anjiplus.template.gaea.business.modules.report.dao.entity.Report;
 import com.anjiplus.template.gaea.business.modules.report.service.ReportService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,13 @@ public class ReportController extends GaeaBaseController<ReportParam, Report, Re
     public ResponseBean copy(@RequestBody ReportDto dto) {
         reportService.copy(dto);
         return ResponseBean.builder().build();
+    }
+
+    @GetMapping({"/sharePageList"})
+    @Permission(code = "query", name = "查询")
+    @GaeaAuditLog(pageTitle = "大屏携带token查询", isSaveResponseData = false)
+    public ResponseBean sharePageList(ReportParam param) {
+        Page<ReportDto> pageDto = reportService.sharePageList(param);
+        return this.responseSuccessWithData(pageDto);
     }
 }

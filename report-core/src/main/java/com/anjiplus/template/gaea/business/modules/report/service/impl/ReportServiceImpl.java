@@ -12,19 +12,23 @@ import com.anjiplus.template.gaea.business.modules.dashboard.service.ReportDashb
 import com.anjiplus.template.gaea.business.modules.dashboardwidget.dao.entity.ReportDashboardWidget;
 import com.anjiplus.template.gaea.business.modules.dashboardwidget.service.ReportDashboardWidgetService;
 import com.anjiplus.template.gaea.business.modules.report.controller.dto.ReportDto;
+import com.anjiplus.template.gaea.business.modules.report.controller.param.ReportParam;
 import com.anjiplus.template.gaea.business.modules.report.dao.ReportMapper;
 import com.anjiplus.template.gaea.business.modules.report.dao.entity.Report;
 import com.anjiplus.template.gaea.business.modules.report.service.ReportService;
 import com.anjiplus.template.gaea.business.modules.reportexcel.dao.entity.ReportExcel;
 import com.anjiplus.template.gaea.business.modules.reportexcel.service.ReportExcelService;
+import com.anjiplus.template.gaea.business.modules.reportshare.service.ReportShareService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,6 +47,9 @@ public class ReportServiceImpl implements ReportService {
     private ReportDashboardWidgetService reportDashboardWidgetService;
     @Autowired
     private ReportExcelService reportExcelService;
+
+    @Autowired
+    private ReportShareService reportShareService;
 
     @Override
     public GaeaBaseMapper<Report> getMapper() {
@@ -157,6 +164,31 @@ public class ReportServiceImpl implements ReportService {
                 break;
             default:
         }
+    }
+
+    /**
+     * 报表列表免token查询，并携带分享大屏永久链接
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public Page<ReportDto> sharePageList(ReportParam param) {
+        IPage<Report> iPage = page(param);
+        List<Report> records = iPage.getRecords();
+
+        List<ReportDto> reportList = new ArrayList<>();
+        records.forEach(report -> {
+            ReportDto reportDto = new ReportDto();
+            GaeaBeanUtils.copyAndFormatter(report, reportDto);
+            String shareForeverUrl = reportShareService.getShareForeverUrl(report.getReportCode());
+            reportDto.setShareUrl(shareForeverUrl);
+            reportList.add(reportDto);
+        });
+
+        Page<ReportDto> pageDto = new Page<>();
+        pageDto.setCurrent(iPage.getCurrent()).setRecords(reportList).setPages(iPage.getPages()).setTotal(iPage.getTotal()).setSize(iPage.getSize());
+        return pageDto;
     }
 
     private Report copyReport(Report report, ReportDto dto){

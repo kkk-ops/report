@@ -56,4 +56,7 @@ public class ReportDto extends GaeaBaseDTO implements Serializable {
     /** 下载次数 */
     private Long downloadCount;
 
+    /** 分享url */
+    private String shareUrl;
+
 }

@@ -17,7 +17,7 @@ export function basecode(value, dicName) {
     return value
   }
 
-  let basecode = getStorageItem('queryForCodeSelect')
+  let basecode = getStorageItem('AJReportDict')
   let dictList = basecode[dicName]
   let dictLabel = value
   for (let i = 0; i < dictList.length; i++) {

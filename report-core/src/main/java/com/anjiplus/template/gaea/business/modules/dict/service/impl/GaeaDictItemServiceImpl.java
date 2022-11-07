@@ -3,9 +3,9 @@ package com.anjiplus.template.gaea.business.modules.dict.service.impl;
 import com.anji.plus.gaea.cache.CacheHelper;
 import com.anji.plus.gaea.constant.BaseOperationEnum;
 import com.anji.plus.gaea.constant.GaeaConstant;
-import com.anji.plus.gaea.constant.GaeaKeyConstant;
 import com.anji.plus.gaea.curd.mapper.GaeaBaseMapper;
 import com.anji.plus.gaea.exception.BusinessException;
+import com.anjiplus.template.gaea.business.constant.BusinessConstant;
 import com.anjiplus.template.gaea.business.modules.dict.dao.GaeaDictItemMapper;
 import com.anjiplus.template.gaea.business.modules.dict.dao.entity.GaeaDictItem;
 import com.anjiplus.template.gaea.business.modules.dict.service.GaeaDictItemService;
@@ -47,7 +47,7 @@ public class GaeaDictItemServiceImpl implements GaeaDictItemService {
         String dictCode = entity.getDictCode();
         String locale = entity.getLocale();
 
-        String key = GaeaKeyConstant.DICT_PREFIX + locale + GaeaConstant.REDIS_SPLIT + dictCode;
+        String key = BusinessConstant.DICT_PREFIX + locale + GaeaConstant.REDIS_SPLIT + dictCode;
         switch (operationEnum) {
             case INSERT:
             case UPDATE:
@@ -55,7 +55,7 @@ public class GaeaDictItemServiceImpl implements GaeaDictItemService {
                 break;
             case DELETE:
                 cacheHelper.hashDel(key, entity.getItemValue());
-                default:
+            default:
         }
     }
 
@@ -67,18 +67,18 @@ public class GaeaDictItemServiceImpl implements GaeaDictItemService {
 
         Map<String, Map<String, String>> dictItemMap = entities.stream()
                 .collect(Collectors.groupingBy(item -> item.getLocale() + GaeaConstant.REDIS_SPLIT +item.getDictCode(),
-                                Collectors.toMap(GaeaDictItem::getItemValue, GaeaDictItem::getItemName,(v1,v2)-> v2)));
+                        Collectors.toMap(GaeaDictItem::getItemValue, GaeaDictItem::getItemName,(v1,v2)-> v2)));
 
         switch (operationEnum) {
             case DELETE_BATCH:
                 //遍历并保持到Redis中
                 dictItemMap.entrySet().stream().forEach(entry -> {
-                    String key = GaeaKeyConstant.DICT_PREFIX  + entry.getKey();
+                    String key = BusinessConstant.DICT_PREFIX  + entry.getKey();
                     Set<String> hashKeys = entry.getValue().keySet();
                     cacheHelper.hashBatchDel(key, hashKeys);
                 });
                 break;
-                default:
+            default:
         }
     }
 

@@ -16,24 +16,28 @@ public interface BusinessConstant {
     String USER_GUEST = "guest";
     String USER_ADMIN = "admin";
 
-
     /**
      * 字典项重复
      */
     String DICT_ITEM_EXIST_GROUP = "dictItemExist";
 
     /**
+     * 数据字典前缀
+     */
+    String DICT_PREFIX = "dataway:dict:prefix:";
+
+    /**
      * 所有url的权限码缓存key
      */
-    String GAEA_SECURITY_AUTHORITIES= "gaea:security:authorities:all";
+    String GAEA_SECURITY_AUTHORITIES= "report:security:authorities:all";
 
     /**
      * 用户登录的token缓存key
      */
-    String GAEA_SECURITY_LOGIN_TOKEN = "gaea:security:login:token:%s";
+    String GAEA_SECURITY_LOGIN_TOKEN = "report:security:login:token:%s";
 
     /**
      * 用户登录的主信息缓存信息
      */
-    String GAEA_SECURITY_LOGIN_USER = "gaea:security:login:user:%s";
+    String GAEA_SECURITY_LOGIN_USER = "report:security:login:user:%s";
 }

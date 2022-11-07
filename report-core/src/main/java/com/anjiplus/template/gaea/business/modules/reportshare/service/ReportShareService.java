@@ -30,4 +30,6 @@ public interface ReportShareService extends GaeaBaseService<ReportShareParam, Re
      * @param dto
      */
     void shareDelay(ReportShareDto dto);
+
+    String getShareForeverUrl(String reportCode);
 }

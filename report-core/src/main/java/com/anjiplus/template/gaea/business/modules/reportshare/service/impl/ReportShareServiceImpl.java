@@ -21,6 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
 * @desc ReportShare 报表分享服务实现
@@ -54,6 +57,35 @@ public class ReportShareServiceImpl implements ReportShareService {
         ReportShare reportShare = this.selectOne(id);
         return reportShare;
     }
+
+    /**
+     * 获取一个永久的分享url，如果不存在，则新增一条
+     *
+     * @param reportCode
+     * @return
+     */
+    @Override
+    public String getShareForeverUrl(String reportCode) {
+        LambdaQueryWrapper<ReportShare> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(ReportShare::getReportCode, reportCode);
+        wrapper.eq(ReportShare::getEnableFlag, EnableFlagEnum.ENABLE.getCodeValue());
+        wrapper.eq(ReportShare::getShareValidTime, "2099-01-01 00:00:00");
+        List<ReportShare> list = list(wrapper);
+        if (!CollectionUtils.isEmpty(list)) {
+            return list.get(0).getShareUrl();
+        }
+        //为空代表需要新增
+        // 此时并不知道前端url是多少，只能从数据库任意获取一条作为url前缀,需保证数据库至少一条数据
+        wrapper.clear();
+        wrapper.eq(ReportShare::getEnableFlag, EnableFlagEnum.ENABLE.getCodeValue());
+        ReportShareDto dto = new ReportShareDto();
+        dto.setShareUrl(list(wrapper).get(0).getShareUrl());
+        dto.setReportCode(reportCode);
+        dto.setSharePassword("");
+        dto.setShareValidType(0);
+        return insertShare(dto).getShareUrl();
+    }
+
 
     @Override
     public ReportShareDto insertShare(ReportShareDto dto) {

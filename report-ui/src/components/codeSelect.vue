@@ -109,7 +109,7 @@ export default {
   mounted() {},
   methods: {
     getListFromBaseCode() {
-      let basecode = getStorageItem("queryForCodeSelect");
+      let basecode = getStorageItem("AJReportDict");
       let list = [];
       if (!basecode.hasOwnProperty(this.dictname)) {
         return [];

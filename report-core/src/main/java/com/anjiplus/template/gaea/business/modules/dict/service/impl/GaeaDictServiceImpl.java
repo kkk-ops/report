@@ -4,9 +4,9 @@ import com.anji.plus.gaea.bean.KeyValue;
 import com.anji.plus.gaea.cache.CacheHelper;
 import com.anji.plus.gaea.constant.Enabled;
 import com.anji.plus.gaea.constant.GaeaConstant;
-import com.anji.plus.gaea.constant.GaeaKeyConstant;
 import com.anji.plus.gaea.curd.mapper.GaeaBaseMapper;
 import com.anji.plus.gaea.utils.GaeaUtils;
+import com.anjiplus.template.gaea.business.constant.BusinessConstant;
 import com.anjiplus.template.gaea.business.modules.dict.dao.GaeaDictItemMapper;
 import com.anjiplus.template.gaea.business.modules.dict.dao.GaeaDictMapper;
 import com.anjiplus.template.gaea.business.modules.dict.dao.entity.GaeaDict;
@@ -63,7 +63,7 @@ public class GaeaDictServiceImpl implements GaeaDictService {
 
         //遍历并保持到Redis中
         dictItemMap.entrySet().stream().forEach(entry -> {
-            String key = GaeaKeyConstant.DICT_PREFIX  + entry.getKey();
+            String key = BusinessConstant.DICT_PREFIX  + entry.getKey();
             cacheHelper.delete(key);
             cacheHelper.hashSet(key, entry.getValue());
         });
@@ -80,7 +80,7 @@ public class GaeaDictServiceImpl implements GaeaDictService {
     public List<KeyValue> select(String dictCode, String language) {
 
         //缓存字典Key
-        String dictKey = GaeaKeyConstant.DICT_PREFIX  + language + GaeaConstant.REDIS_SPLIT + dictCode;
+        String dictKey = BusinessConstant.DICT_PREFIX  + language + GaeaConstant.REDIS_SPLIT + dictCode;
 
         Map<String, String> dictMap = cacheHelper.hashGet(dictKey);
 
@@ -136,7 +136,7 @@ public class GaeaDictServiceImpl implements GaeaDictService {
     public Collection<KeyValue> selectTypeCode(String system, String language) {
 
         //缓存字典Key
-        String dictKey = GaeaKeyConstant.DICT_PREFIX + language + GaeaConstant.REDIS_SPLIT + system;
+        String dictKey = BusinessConstant.DICT_PREFIX + language + GaeaConstant.REDIS_SPLIT + system;
 
         Map<String, String> dictMap = cacheHelper.hashGet(dictKey);
 

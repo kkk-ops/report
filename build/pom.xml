@@ -13,7 +13,7 @@
 
     <groupId>com.anji-plus.otwb</groupId>
 	<artifactId>product-report-starter</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -61,6 +61,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-mock</artifactId>
+            <version>2.0.8</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-context</artifactId>
             <version>2.2.6.RELEASE</version>
@@ -75,13 +81,13 @@
         <dependency>
             <groupId>com.anji-plus</groupId>
             <artifactId>spring-boot-gaea</artifactId>
-            <version>2.0.3.RELEASE</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-data-redis</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>2.0.5.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.anji-plus</groupId>
+            <artifactId>spring-boot-starter-gaea-oss</artifactId>
+            <version>2.0.5.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -103,12 +109,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>5.2.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>2.10.6</version>
         </dependency>
 
         <dependency>
@@ -158,7 +158,7 @@
         </dependency>
 
     </dependencies>
-	
+
 
     <!-- 上传到公司私服， mvn clean deploy -Dmaven.test.skip=true -->
     <build>
